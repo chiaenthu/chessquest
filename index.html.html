@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ChessQuest｜西洋棋新手學習平台</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,"Noto Sans TC",system-ui,sans-serif;background:#f4f7f2;color:#173126}
+button{font:inherit;cursor:pointer;border:0}.app{min-height:100vh;display:flex}
+.sidebar{width:240px;background:#173d2d;color:white;padding:24px 18px;position:fixed;inset:0 auto 0 0;z-index:5}
+.logo{font-weight:900;font-size:24px;margin:4px 10px 28px}.logo span{color:#b8e36d}
+.nav button{display:block;width:100%;text-align:left;padding:13px 14px;margin:6px 0;border-radius:12px;background:transparent;color:#dce9e0}
+.nav button.active,.nav button:hover{background:#2c5a43;color:white}.profile{position:absolute;bottom:22px;left:18px;right:18px;background:#224a38;border-radius:14px;padding:14px}
+.avatar{width:38px;height:38px;border-radius:50%;background:#b8e36d;color:#173d2d;display:grid;place-items:center;font-weight:900;float:left;margin-right:10px}
+.main{margin-left:240px;width:calc(100% - 240px);padding:28px 34px 60px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.pill{background:white;border:1px solid #e1e8e1;border-radius:999px;padding:9px 14px;font-size:14px}.hero{background:linear-gradient(120deg,#214c38,#326b4c);color:white;border-radius:24px;padding:36px;display:grid;grid-template-columns:1.4fr .8fr;gap:30px;overflow:hidden}
+.hero h1{font-size:42px;line-height:1.1;margin:8px 0 14px}.hero p{color:#dcece1;max-width:620px;line-height:1.7}.cta{background:#c8ee78;color:#173d2d;padding:13px 20px;border-radius:12px;font-weight:900}.hero-card{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);padding:22px;border-radius:18px}.mini-board{display:grid;grid-template-columns:repeat(8,1fr);aspect-ratio:1;border-radius:10px;overflow:hidden}.sq{display:grid;place-items:center;font-size:25px}.sq:nth-child(16n+1),.sq:nth-child(16n+3),.sq:nth-child(16n+5),.sq:nth-child(16n+7),.sq:nth-child(16n+10),.sq:nth-child(16n+12),.sq:nth-child(16n+14),.sq:nth-child(16n+16){background:#dfe9d8}.sq:nth-child(16n+2),.sq:nth-child(16n+4),.sq:nth-child(16n+6),.sq:nth-child(16n+8),.sq:nth-child(16n+9),.sq:nth-child(16n+11),.sq:nth-child(16n+13),.sq:nth-child(16n+15){background:#6e8f6b}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0}.stat,.card{background:white;border:1px solid #e2e9e2;border-radius:17px;padding:20px}.stat b{font-size:27px;display:block}.section-title{display:flex;justify-content:space-between;align-items:center;margin:28px 0 13px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.lesson{min-height:185px;position:relative}.tag{font-size:12px;color:#547060;font-weight:800}.lesson h3{margin:10px 0}.lesson p{color:#718177;font-size:14px;line-height:1.6}.progress{height:7px;background:#e8eee8;border-radius:9px;overflow:hidden}.progress i{display:block;height:100%;background:#76a95a;border-radius:9px}.locked{opacity:.58}.badge{display:inline-block;background:#edf5df;color:#4d7439;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800}.page{display:none}.page.active{display:block}
+.play{display:grid;grid-template-columns:minmax(330px,600px) 1fr;gap:22px}.board-wrap{background:white;border-radius:20px;padding:18px;border:1px solid #e2e9e2}.board{display:grid;grid-template-columns:repeat(8,1fr);width:100%;aspect-ratio:1;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px #193d2d18}.square{display:grid;place-items:center;font-size:clamp(27px,5vw,52px);user-select:none}.light{background:#e8efd9}.dark{background:#6f916d}.selected{outline:4px solid #c7ec70;outline-offset:-4px}.legal{box-shadow:inset 0 0 0 5px rgba(199,236,112,.6)}.capture{box-shadow:inset 0 0 0 5px rgba(231,136,102,.7)}.sidepanel{display:grid;gap:15px}.task h2{margin-top:0}.task p{line-height:1.7;color:#66776c}.xp{font-size:34px;font-weight:900;color:#4e7e38}.moves{max-height:220px;overflow:auto}.move{padding:9px;border-bottom:1px solid #edf0ed;font-size:14px}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.secondary{background:#edf2ed;color:#244735;padding:10px 14px;border-radius:10px;font-weight:800}.watch-board{max-width:600px;margin:auto}.watch-status{text-align:center;margin:12px;font-weight:800}.watch-actions{display:flex;gap:10px;justify-content:center;margin-top:14px}.rank-row{display:flex;align-items:center;gap:15px;padding:15px;border-bottom:1px solid #edf0ed}.rank-row:last-child{border:0}.rank-no{width:30px;font-weight:900}.avatar2{width:40px;height:40px;border-radius:50%;background:#dcecc6;display:grid;place-items:center}.spacer{flex:1}
+@media(max-width:900px){.sidebar{width:72px;padding:18px 10px}.logo{font-size:0}.logo:after{content:"♟";font-size:25px}.nav button{font-size:0;text-align:center}.nav button:first-letter{font-size:20px}.profile{display:none}.main{margin-left:72px;width:calc(100% - 72px);padding:18px}.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.play{grid-template-columns:1fr}}
+@media(max-width:600px){.hero h1{font-size:31px}.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.main{padding:12px}.hero{padding:24px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+<div class="logo">Chess<span>Quest</span></div>
+<div class="nav">
+<button class="active" onclick="show('home',this)">🏠　首頁</button>
+<button onclick="show('learn',this)">🗺️　學習地圖</button>
+<button onclick="show('play',this)">♟️　實戰任務</button>
+<button onclick="show('watch',this)">👀　觀戰學習</button>
+<button onclick="show('rank',this)">🏆　好友排行</button>
+</div>
+<div class="profile"><div class="avatar">CQ</div><b>新手玩家</b><br><small>Lv. 3　<span id="profileXP">420 XP</span></small></div>
+</aside>
+
+<main class="main">
+<div class="top"><div><b>早安，棋手 👋</b><div style="color:#758178;font-size:13px">今天也來完成一個小挑戰吧</div></div><div class="pill">🔥 3 日連勝　　⭐ 420 XP</div></div>
+
+<section id="home" class="page active">
+<div class="hero"><div><span class="badge">新手學習模式</span><h1>從第一步開始，<br>真的學會下西洋棋。</h1><p>不用背一大堆規則。跟著任務直接移動棋子、完成挑戰，再透過觀戰學會「為什麼這一步比較好」。</p><button class="cta" onclick="show('learn',document.querySelectorAll('.nav button')[1])">開始今天的任務 →</button></div>
+<div class="hero-card"><div style="display:flex;justify-content:space-between;margin-bottom:12px"><b>今日小挑戰</b><span>+50 XP</span></div><div class="mini-board" id="mini"></div><p style="margin-bottom:0">第 2 關　兵怎麼走？</p></div></div>
+<div class="stats"><div class="stat"><span>今日任務</span><b>2 / 3</b><small>再完成 1 個即可獲得獎勵</small></div><div class="stat"><span>本週 XP</span><b>420</b><small>距離下一級 80 XP</small></div><div class="stat"><span>學習進度</span><b>38%</b><small>6 個關卡已解鎖</small></div><div class="stat"><span>連勝</span><b>3 🔥</b><small>再玩一局保持紀錄</small></div></div>
+<div class="section-title"><h2>繼續學習</h2><span class="tag">推薦下一步</span></div>
+<div class="grid"><div class="card lesson"><span class="tag">01　基礎</span><h3>認識棋盤</h3><p>知道橫線、直線與棋子擺放位置。</p><div class="progress"><i style="width:100%"></i></div><small>已完成 ✓</small></div>
+<div class="card lesson"><span class="tag">02　走法</span><h3>兵怎麼走？</h3><p>直接把 e2 的兵往前移動，完成你的第一個任務。</p><button class="cta" style="padding:9px 13px" onclick="show('play',document.querySelectorAll('.nav button')[2])">開始任務</button></div>
+<div class="card lesson locked"><span class="tag">03　走法</span><h3>馬的 L 型</h3><p>完成上一關後解鎖。</p><span class="badge">🔒 待解鎖</span></div></div>
+</section>
+
+<section id="learn" class="page">
+<div class="section-title"><div><h1>學習地圖</h1><p>一步一步學，不需要先懂全部規則。</p></div></div>
+<div class="grid">
+<div class="card lesson"><span class="tag">01 · 已完成</span><h3>♙ 認識棋盤</h3><p>8×8 棋盤、白黑方與基本座標。</p><div class="progress"><i style="width:100%"></i></div></div>
+<div class="card lesson"><span class="tag">02 · 目前任務</span><h3>♟ 兵怎麼走？</h3><p>親手移動兵，理解第一步與吃子的概念。</p><button class="cta" onclick="show('play',document.querySelectorAll('.nav button')[2])">進入關卡</button></div>
+<div class="card lesson locked"><span class="tag">03 · 下一關</span><h3>♞ 馬的 L 型</h3><p>學會最特別的棋子：馬。</p><span class="badge">完成第 2 關解鎖</span></div>
+<div class="card lesson locked"><span class="tag">04</span><h3>⚔️ 學會吃子</h3><p>知道什麼時候可以把對方棋子吃掉。</p></div>
+<div class="card lesson locked"><span class="tag">05</span><h3>👑 找到將軍</h3><p>理解「王正在被攻擊」的意思。</p></div>
+<div class="card lesson"><span class="tag">06 · 觀戰</span><h3>👀 觀戰猜棋</h3><p>看一局短棋，關鍵時刻自己預測下一步。</p><button class="secondary" onclick="show('watch',document.querySelectorAll('.nav button')[3])">開始觀戰</button></div>
+</div>
+</section>
+
+<section id="play" class="page">
+<div class="section-title"><div><h1>實戰任務</h1><p>不用選擇題，直接移動棋子。</p></div><span class="pill">任務獎勵 +50 XP</span></div>
+<div class="play"><div class="board-wrap"><div id="board" class="board"></div><div class="controls"><button class="secondary" onclick="undo()">↶ 復原</button><button class="secondary" onclick="resetGame()">↻ 重來</button><button class="secondary" onclick="hint()">💡 提示</button></div></div>
+<div class="sidepanel"><div class="card task"><span class="tag">MISSION 02</span><h2>把 e2 的兵往前走一步</h2><p>找到白方在 e2 的兵，把它移到 e3。你可以拖曳棋子，也可以先點棋子再點目的地。</p><div class="xp" id="xp">+0 XP</div><p id="feedback">等待你的第一步……</p></div>
+<div class="card"><b>任務進度</b><div style="margin:12px 0 5px;display:flex;justify-content:space-between"><small>第一步</small><small id="prog">0%</small></div><div class="progress"><i id="progbar" style="width:0%"></i></div></div>
+<div class="card"><b>走棋紀錄</b><div class="moves" id="moves"><div class="move">還沒有走棋</div></div></div></div></div>
+</section>
+
+<section id="watch" class="page">
+<div class="section-title"><div><h1>觀戰學習</h1><p>看棋不是只看結果，而是練習「下一步會發生什麼」。</p></div></div>
+<div class="card"><div class="watch-board"><div id="watchBoard" class="board"></div><div class="watch-status" id="watchStatus">第 1 步：白方準備行動</div><div class="watch-actions"><button class="secondary" onclick="watchPrev()">← 上一步</button><button class="cta" onclick="watchNext()">下一步 →</button><button class="secondary" onclick="watchReset()">重播</button></div></div></div>
+<div class="card" style="margin-top:15px"><h3>👀 觀察提示</h3><p id="watchTip">先不要急著按下一步。觀察哪一顆棋子最有可能行動，想 3 秒再繼續。</p></div>
+</section>
+
+<section id="rank" class="page">
+<div class="section-title"><div><h1>好友排行</h1><p>用 XP 看見自己的成長，也和同學一起挑戰。</p></div></div>
+<div class="card">
+<div class="rank-row"><span class="rank-no">1</span><div class="avatar2">🐯</div><b>小棋王</b><span class="spacer"></span><b>1,280 XP</b></div>
+<div class="rank-row"><span class="rank-no">2</span><div class="avatar2">🦊</div><b>狐狸</b><span class="spacer"></span><b>970 XP</b></div>
+<div class="rank-row" style="background:#f3f8eb;border-radius:12px"><span class="rank-no">3</span><div class="avatar2">♟</div><b>你</b><span class="spacer"></span><b>420 XP</b></div>
+<div class="rank-row"><span class="rank-no">4</span><div class="avatar2">🐼</div><b>熊熊</b><span class="spacer"></span><b>390 XP</b></div>
+</div>
+</section>
+</main></div>
+
+<script>
+const pieces={wp:'♙',wr:'♖',wn:'♘',wb:'♗',wq:'♕',wk:'♔',bp:'♟',br:'♜',bn:'♞',bb:'♝',bq:'♛',bk:'♚'};
+let board=[...['br','bn','bb','bq','bk','bb','bn','br'],...Array(8).fill('bp'),...Array(32).fill(''),...Array(8).fill('wp'),...['wr','wn','wb','wq','wk','wb','wn','wr']];
+let history=[],selected=-1,xp=0,drag=-1;
+function renderBoard(id='board',arr=board,interactive=true){
+ const el=document.getElementById(id); if(!el)return; el.innerHTML='';
+ arr.forEach((p,i)=>{const s=document.createElement('div');s.className='square '+((Math.floor(i/8)+i)%2?'dark':'light');s.dataset.i=i;if(selected===i&&id==='board')s.classList.add('selected');if(id==='board'&&selected>=0&&legal(selected,i))s.classList.add(arr[i]?'capture':'legal');s.textContent=pieces[p]||'';
+ if(interactive){s.onclick=()=>clickSquare(i);s.draggable=!!p;s.ondragstart=()=>drag=i;s.ondragover=e=>e.preventDefault();s.ondrop=()=>move(drag,i)}
+ el.appendChild(s)});
+}
+function color(p){return p?p[0]:''}
+function legal(a,b){if(a<0||a===b||!board[a])return false;let p=board[a],r=Math.floor(a/8),c=a%8,R=Math.floor(b/8),C=b%8;if(color(board[b])===color(p))return false;let dr=R-r,dc=C-c,t=p[1];
+if(t==='p'){let d=p[0]==='w'?-1:1;let start=p[0]==='w'?6:1;if(dc===0&&!board[b]&&dr===d)return true;if(dc===0&&!board[b]&&r===start&&dr===2*d&&!board[a+d*8])return true;if(Math.abs(dc)===1&&dr===d&&board[b])return true;return false}
+if(t==='n')return (Math.abs(dr)===2&&Math.abs(dc)===1)||(Math.abs(dr)===1&&Math.abs(dc)===2);
+if(t==='k')return Math.max(Math.abs(dr),Math.abs(dc))===1;
+if(t==='r'||t==='b'||t==='q'){let ok=t==='q'||(t==='r'?(dr===0||dc===0):(Math.abs(dr)===Math.abs(dc)));if(!ok)return false;let sr=Math.sign(dr),sc=Math.sign(dc),rr=r+sr,cc=c+sc;while(rr!==R||cc!==C){if(board[rr*8+cc])return false;rr+=sr;cc+=sc}return true}return false}
+function clickSquare(i){if(selected<0){if(board[i]&&color(board[i])==='w'){selected=i;renderBoard()}return}if(legal(selected,i))move(selected,i);else{selected=board[i]&&color(board[i])==='w'?i:-1;renderBoard()}}
+function move(a,b){if(!legal(a,b))return;history.push([...board]);let from=coord(a),to=coord(b),cap=board[b];board[b]=board[a];board[a]='';selected=-1;renderBoard();addMove(from+' → '+to+(cap?' ×':''));if(a===52&&b===44){xp=50;document.getElementById('xp').textContent='+50 XP';document.getElementById('feedback').textContent='完成！你剛剛親手完成了第一個教學任務 🎉';document.getElementById('prog').textContent='100%';document.getElementById('progbar').style.width='100%';document.getElementById('profileXP').textContent='470 XP'}else document.getElementById('feedback').textContent='很好！繼續觀察棋子可以走到哪些位置。'}
+function coord(i){return 'abcdefgh'[i%8]+(8-Math.floor(i/8))}
+function addMove(t){let m=document.getElementById('moves');if(m.innerHTML.includes('還沒有'))m.innerHTML='';let d=document.createElement('div');d.className='move';d.textContent=t;m.prepend(d)}
+function undo(){if(!history.length)return;board=history.pop();selected=-1;renderBoard()}
+function resetGame(){board=[...['br','bn','bb','bq','bk','bb','bn','br'],...Array(8).fill('bp'),...Array(32).fill(''),...Array(8).fill('wp'),...['wr','wn','wb','wq','wk','wb','wn','wr']];history=[];xp=0;selected=-1;document.getElementById('xp').textContent='+0 XP';document.getElementById('feedback').textContent='等待你的第一步……';document.getElementById('prog').textContent='0%';document.getElementById('progbar').style.width='0%';document.getElementById('moves').innerHTML='<div class="move">還沒有走棋</div>';renderBoard()}
+function hint(){selected=52;renderBoard();document.getElementById('feedback').textContent='提示：亮起的棋子就是 e2 的兵。把它往上移一格。'}
+function show(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='play')renderBoard();if(id==='watch')renderWatch()}
+let wm=[52,36,12,28,62,45,6,21,51,35,13,29],wi=0;
+function renderWatch(){let a=[...['br','bn','bb','bq','bk','bb','bn','br'],...Array(8).fill('bp'),...Array(32).fill(''),...Array(8).fill('wp'),...['wr','wn','wb','wq','wk','wb','wn','wr']];for(let j=0;j<wi;j+=2){if(wm[j]!==undefined&&wm[j+1]!==undefined){a[wm[j+1]]=a[wm[j]];a[wm[j]]=''}}renderBoard('watchBoard',a,false);document.getElementById('watchStatus').textContent=wi===0?'第 1 步：先觀察白方':`已播放 ${wi/2} 回合`;document.getElementById('watchTip').textContent=wi>=4?'關鍵時刻！你注意到黑方剛剛把馬走出來了嗎？想想白方下一步可以怎麼利用。':'先不要急著按下一步。觀察哪一顆棋子最有可能行動。'}
+function watchNext(){if(wi<wm.length)wi+=2;renderWatch()}function watchPrev(){if(wi>0)wi-=2;renderWatch()}function watchReset(){wi=0;renderWatch()}
+function mini(){let e=document.getElementById('mini');let a=['br','','','','bk','','','br','','bp','','bp','','bp','','','',...Array(40).fill(''),'wp','','wp','','wp','','wp','','wr','','','','wk','','',''];a.slice(0,64).forEach(p=>{let s=document.createElement('div');s.className='sq';s.textContent=pieces[p]||'';e.appendChild(s)})}
+mini();renderBoard();renderWatch();
+</script>
+</body>
+</html>
